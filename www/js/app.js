@@ -23,17 +23,38 @@ angular.module('ionicApp', ['ionic'])
   })
   .controller('MyCtrl', function ($scope, $interval) {
     'use strict';
-    var interval;
+    var interval, intervalWrapper, updateCounter;
+
+    $scope.counter = 0;
+    $scope.test = {};
+
+    $scope.templatePath = function () {
+      return 'templates/' + $scope.counter + '.html';
+    };
 
     $scope.onTap = function () {
       console.log('onTap');
+      updateCounter();
     };
 
-    function updateFilterValue() {
-      console.log('interval');
-    }
+    updateCounter = function () {
+      var i;
 
-    interval = $interval(updateFilterValue, 1000);
+      // Increment counter.
+      $scope.counter = ($scope.counter >= 9) ? 0 : $scope.counter + 1;
+
+      // Writing big object on the $scope.
+      for (i = 0; i < 10000; i = i + 1) {
+        $scope.test[i] = "Lorem ipsum dolor sit amet";
+      }
+    };
+
+    intervalWrapper = function () {
+      console.log('interval');
+      updateCounter();
+    };
+
+    interval = $interval(intervalWrapper, 1000);
 
     $scope.$on('$destroy', function () {
       $interval.cancel(interval);
