@@ -21,9 +21,9 @@ angular.module('ionicApp', ['ionic'])
       }
     });
   })
-  .controller('MyCtrl', function ($scope, $interval) {
+  .controller('MyCtrl', function ($scope, $timeout, $interval) {
     'use strict';
-    var interval, intervalWrapper, updateCounter;
+    var interval, intervalWrapper, updateCounter, doThings;
 
     $scope.counter = 0;
     $scope.test = {};
@@ -34,18 +34,25 @@ angular.module('ionicApp', ['ionic'])
 
     $scope.onTap = function () {
       console.log('onTap');
-      updateCounter();
+      $timeout(updateCounter, 250);
     };
 
     updateCounter = function () {
-      var i;
-
       // Increment counter.
       $scope.counter = ($scope.counter >= 9) ? 0 : $scope.counter + 1;
 
+      doThings(0, 10000);
+      doThings(10000, 20000);
+      doThings(20000, 30000);
+      doThings(30000, 40000);
+    };
+
+    doThings = function (min, max) {
+      var i;
+
       // Writing big object on the $scope.
-      for (i = 0; i < 10000; i = i + 1) {
-        $scope.test[i] = "Lorem ipsum dolor sit amet";
+      for (i = min; i < max; i = i + 1) {
+        $scope.test[i] = "Lorem ipsum " + i + " dolor sit amet";
       }
     };
 
